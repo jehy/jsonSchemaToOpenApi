@@ -1,0 +1,90 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "defaultTitle",
+    "description": "defaultDescription",
+    "version": "0.1"
+  },
+  "servers": [
+    {
+      "url": "https://onetwotrip.com"
+    }
+  ],
+  "paths": {
+    "/_api/searching/startSync5/": {
+      "get": {
+        "description": "Auto generated using Swagger Inspector",
+        "parameters": [
+          {
+            "name": "cs",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "E"
+          },
+          {
+            "name": "ad",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "1"
+          },
+          {
+            "name": "route",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "1702PARMAD"
+          },
+          {
+            "name": "in",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "0"
+          },
+          {
+            "name": "showDeeplink",
+            "in": "query",
+            "schema": {
+              "type": "boolean"
+            },
+            "example": "true"
+          },
+          {
+            "name": "cn",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            },
+            "example": "1"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Auto generated using Swagger Inspector",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        },
+        "servers": [
+          {
+            "url": "https://onetwotrip.com"
+          }
+        ]
+      },
+      "servers": [
+        {
+          "url": "https://onetwotrip.com"
+        }
+      ]
+    }
+  }
+}

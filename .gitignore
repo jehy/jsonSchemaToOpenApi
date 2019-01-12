@@ -1,0 +1,17 @@
+node_modules
+logs
+npm-debug.log
+v8.log
+*#*
+*!*
+config/config.json
+.idea/
+.DS_Store
+import/
+config/development.json
+config/production.json
+err_reports
+config/runtime.json
+test-results.xml
+.nyc_output/
+dist
