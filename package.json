@@ -4,13 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node ./index.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "ajv": "^6.6.2",
-    "debug": "^4.1.1",
     "json-schema-to-openapi-schema": "^0.3.0",
     "openapi-schema-validator": "^3.0.2"
   }

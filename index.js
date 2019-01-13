@@ -7,14 +7,7 @@ const schema = require('./searchResultV2');
 const ajv = new Ajv({verbose: true, allErrors: true});
 const toOpenApi = require('json-schema-to-openapi-schema');
 const OpenAPISchemaValidator = require('openapi-schema-validator').default;
-//const debug = require('debug')('convert');
-// const swaggerSpecValidator = require('swagger-spec-validator');
 const swaggerDraft = require('./swaggerDraft.json');
-
-//const Validator = require('swagger-model-validator');
-//const validator = new Validator(swagger);
-
-//debug.enabled = true;
 
 function debug(data)
 {
@@ -25,26 +18,6 @@ function clone(obj)
 {
   return JSON.parse(JSON.stringify(obj));
 }
-
-function removeAdditionalProperties(obj)
-{
-  const defaultValue = obj instanceof Array && [] || {};
-  return Object.entries(obj).reduce((res, [name, value])=>{
-    if(name==='additionalProperties')
-    {
-      return res;
-    }
-    if(typeof value === 'string' || value instanceof String || value instanceof Number)
-    {
-      res[name]=value;
-      return res;
-    }
-    res[name]=removeAdditionalProperties(value);
-    return res;
-  }, defaultValue)
-}
-
-
 
 debug('compiling schema via ajv');
 try {
@@ -87,18 +60,9 @@ const errors = validator.validate(swaggerDoc);
 if(errors)
 {
   debug(`There were errors while validating converted schema as open api:`);
-  debug(errors);
+  debug(JSON.stringify(errors, null, 3));
+  process.exit(1);
 }
-const swaggerDocNoAdditional = removeAdditionalProperties(clone(swaggerDoc));
-const errors2 = validator.validate(swaggerDocNoAdditional);
-if(errors2)
-{
-  debug(`There were errors while validating converted schema without additional properties as open api:`);
-  debug(JSON.stringify(errors2, null, 3));
-  // debug(errors2);
-}
-else
-{
-  debug(`There were NO errors while validating converted schema without additional properties as open api!`);
-}
-// console.log(JSON.stringify(swaggerDocNoAdditional, null, 3));
+
+debug('validation of coverted schema okay!');
+process.exit(0);
