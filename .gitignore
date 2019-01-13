@@ -15,3 +15,4 @@ config/runtime.json
 test-results.xml
 .nyc_output/
 dist
+package-lock.json
