@@ -30,6 +30,7 @@ catch(err)
 }
 debug('schema is valid');
 
+fs.writeFileSync('jsonSchema.json', JSON.stringify(schema, null, 3), 'utf8');
 
 const convertedSchema = toOpenApi(Object.assign( {}, schema, {'$schema': 'http://json-schema.org/draft-07/schema#'}));
 
