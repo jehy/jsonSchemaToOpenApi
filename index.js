@@ -19,6 +19,40 @@ function clone(obj)
   return JSON.parse(JSON.stringify(obj));
 }
 
+function isPrimitive(test) {
+  return (test !== Object(test));
+}
+
+function fixPatternProperties(obj)
+{
+  const defaultValue = obj instanceof Array && [] || {};
+  return Object.entries(obj).reduce((res, [name, value])=>{
+    if(name==='additionalProperties')
+    {
+      if(!res.additionalProperties)
+      {
+        res.additionalProperties = value;
+      }
+      return res;
+    }
+    if(name==='patternProperties')
+    {
+      const inner = fixPatternProperties(Object.values(value)[0]);
+      res.additionalProperties = inner;
+      res['x-pattern'] = Object.keys(value)[0];
+      return res;
+    }
+    if(isPrimitive(value))
+    {
+      res[name]=value;
+      return res;
+    }
+    res[name]=fixPatternProperties(value);
+    return res;
+  }, defaultValue)
+}
+
+
 debug('compiling schema via ajv');
 try {
   ajv.compile(schema);
@@ -32,7 +66,11 @@ debug('schema is valid');
 
 fs.writeFileSync('jsonSchema.json', JSON.stringify(schema, null, 3), 'utf8');
 
-const convertedSchema = toOpenApi(Object.assign( {}, schema, {'$schema': 'http://json-schema.org/draft-07/schema#'}));
+debug('converting patternProperties');
+const propertiesConverted  = fixPatternProperties(schema);
+fs.writeFileSync('jsonSchemaConvertedProps.json', JSON.stringify(propertiesConverted, null, 3), 'utf8');
+
+const convertedSchema = toOpenApi(Object.assign( {}, propertiesConverted, {'$schema': 'http://json-schema.org/draft-07/schema#'}));
 
 // debug(convertedSchema);
 fs.writeFileSync('openApi.json', JSON.stringify(convertedSchema, null, 3), 'utf8');
@@ -58,7 +96,7 @@ fs.writeFileSync('swagger.json', JSON.stringify(swaggerDoc, null, 3), 'utf8');
 
 
 const errors = validator.validate(swaggerDoc);
-if(errors)
+if(errors && errors.length)
 {
   debug(`There were errors while validating converted schema as open api:`);
   debug(JSON.stringify(errors, null, 3));
